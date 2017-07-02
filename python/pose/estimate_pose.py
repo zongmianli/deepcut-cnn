@@ -78,6 +78,7 @@ def estimate_pose(image, model_def, model_bin, scales=None):  # pylint: disable=
     _LOGGER.debug("Image shape: %s.", im_orig.shape)
     best_pose = None
     highest_confidence = 0.
+    best_scale_factor = 0.
     for scale_factor in scales:
         _LOGGER.debug("Scale %f...", scale_factor)
         image = im_orig.copy()
@@ -124,8 +125,9 @@ def estimate_pose(image, model_def, model_bin, scales=None):  # pylint: disable=
                           "%f (min confidence).", scale_factor, minconf)
             highest_confidence = minconf
             best_pose = pose
+            best_scale_factor = scale_factor
     _LOGGER.debug("Pose estimated.")
-    return best_pose
+    return best_pose, best_scale_factor
 
 
 def _pose_from_mats(scoremat, offmat, scale):
@@ -244,6 +246,10 @@ def _cnn_process_image(model, net_input):
 
 def _cutoff_tile(sm, num_tiles, idx, cut_off, is_x):
     """Cut the valid parts of the CNN predictions for a tile."""
+    #print num_tiles
+    #print idx
+    #print cut_off
+    cut_off = int(cut_off)
     if is_x:
         sm = sm.transpose((1, 0, 2, 3))
     if num_tiles == 1:
