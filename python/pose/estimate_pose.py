@@ -26,7 +26,7 @@ _MEAN = _np.array([104., 117., 123.])
 # Scale factor for the CNN offset predictions.
 _LOCREF_SCALE_MUL = _np.sqrt(53.)
 # Maximum size of one tile to process (to limit the required GPU memory).
-_MAX_SIZE = 700
+_MAX_SIZE = 1400
 
 _STRIDE = 8.
 
